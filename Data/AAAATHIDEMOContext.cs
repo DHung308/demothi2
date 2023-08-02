@@ -15,5 +15,9 @@ namespace AAAATHIDEMO.Data
         }
 
         public DbSet<AAAATHIDEMO.Models.Student> Student { get; set; } = default!;
+
+        public DbSet<AAAATHIDEMO.Models.Dongvat> Dongvat { get; set; } = default!;
+
+        public DbSet<AAAATHIDEMO.Models.Cat> Cat { get; set; } = default!;
     }
 }
