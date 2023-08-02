@@ -7,16 +7,19 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using AAAATHIDEMO.Data;
 using AAAATHIDEMO.Models;
+using AAAATHIDEMO.Models.Process;
 
 namespace AAAATHIDEMO.Controllers
 {
     public class StudentController : Controller
     {
         private readonly AAAATHIDEMOContext _context;
+        private readonly StringProcess _StringProcess;
 
         public StudentController(AAAATHIDEMOContext context)
         {
             _context = context;
+            _StringProcess = new StringProcess();
         }
 
         // GET: Student
@@ -49,7 +52,18 @@ namespace AAAATHIDEMO.Controllers
         public IActionResult Create()
         {
             ViewData["FaID"] = new SelectList(_context.Faculty, "FaID", "FaName");
-            return View();
+            string newStdID;
+            if(_context.Student.Any())
+            {
+                var lastStdID = _context.Student.OrderByDescending(s => s.ID).First();
+                newStdID = _StringProcess.AutoGenerateCode(lastStdID.ID);
+            }
+            else
+            {
+                newStdID = "STD001";
+            }
+            ViewBag.StdID = newStdID;
+            return View(new Student { ID = newStdID});
         }
 
         // POST: Student/Create
